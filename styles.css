@@ -336,6 +336,13 @@ aside {
     background-color: #77b300;
     border-radius: 50%; }
 
+  .statusOn .statusOffCircle {
+    height: 20px;
+    width: 20px;
+    background-color: rgb(66,66,66);
+    border-radius: 50%; }
+
+
 /*********************
 SECTION
 *********************/
@@ -490,8 +497,7 @@ footer {
     #messageForm #messageSubmit:hover {
       background-color: #77b300;
       color: white; }
-<<<<<<< HEAD
-=======
+
 
 /*********************
 CREDITS
@@ -506,4 +512,3 @@ CREDITS
     text-decoration: underline; }
 
 /*# sourceMappingURL=styles.css.map */
->>>>>>> 6196933dd34c89e2b325e7e261fec6f9b0c2dbd8

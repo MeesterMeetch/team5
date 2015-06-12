@@ -36,7 +36,7 @@ var userStatus = [
 
     "<div class='status'>",
      "<div class='statusImage'>",
-        "<%=staus%>",
+        "<%=stauts%>",
      "</div>",
      "<div class='statusName'>",
        "Name",
