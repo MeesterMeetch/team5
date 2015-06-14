@@ -1,6 +1,5 @@
 var $username;
 var $userImage;
-
 $(document).ready(function(){
   page.init();
 });
@@ -9,10 +8,12 @@ $(document).ready(function(){
 var page = {
 
   url: "http://tiy-fee-rest.herokuapp.com/collections/blabber",
+  urllogin: "http://tiy-fee-rest.herokuapp.com/collections/blabberuserlogin",
 
   init: function () {
     page.initStyling();
     page.initEvents();
+
 
   },
 
@@ -22,8 +23,12 @@ var page = {
   },
 
 
-  initEvents: function (event) {
 
+
+  initEvents: function (event) {
+    /////////Added this for login///////////////////
+    $('#landingPageForm').on('submit', page.addLogin);
+    ////////////////////////////////////////////////
     $('#messageForm').on('submit', page.addMessage);
 
     $('#logOutButton').on('click', function(){
@@ -32,6 +37,7 @@ var page = {
 
     $('#landingPageImagesBlock').on('click', '.landingPageImage', function(e){
       e.preventDefault();
+      console.log('hello');
       $(this).siblings().removeClass('selectedUserImage');
       $(this).addClass('selectedUserImage');
       console.log($(this).html().trim());
@@ -61,6 +67,9 @@ var page = {
         $('#landingPageImageErrorBlock').removeClass('activeImageError');
         $('#landingPageUsernameErrorBlock').removeClass('activeUsernameError');
         page.loadTemplate("loggedInLeftBlock", userInfoArray, $('#loggedInLeft'));
+        /////////////Added this for status bar/////////////////
+        page.loadTemplate("userStatus", userInfoArray, $('#asideMain'))
+        ///////////////////////////////////////////////////////
 
       } else if ($userImage === undefined && $('#landingFormUsername').val().trim().length === 0) {
         $('#landingPageImageErrorBlock').addClass('activeImageError');
@@ -72,11 +81,15 @@ var page = {
         $('#landingPageUsernameErrorBlock').addClass('activeUsernameError');
         $('#landingPageImageErrorBlock').removeClass('activeImageError');
       }
+
+
     });
 
+
     // setInterval(function() {
-    //   page.loadMessages();
+    //    page.loadMessages();
     // }, 2000);
+
   },
 
   addOneMessageToDOM: function(message) {
@@ -87,24 +100,31 @@ var page = {
     _.each(messageCollection, page.addOneMessageToDOM);
   },
 
+
   loadMessages: function () {
     $.ajax({
     url: page.url,
     method: 'GET',
     success: function (data) {
+
       page.addAllMessagesToDOM(data.reverse());
+      
       $('.message').each(function(idx, el, arr){
-        if ($(el).find('.messageInfoName').text().trim() !== $username) {
-          $(el).find('.messageDelete').hide();
-        }
-      });
+         if ($(el).find('.messageInfoName').text().trim() !== $username) {
+           $(el).find('.messageDelete').hide();
+         }
+        });
+
       $('#sectionMain').scrollTop($('#sectionMain')[0].scrollHeight);
     },
+
+
     error: function (err) {
 
     }
   });
 },
+
 
   createMessage: function (newMessage) {
 
@@ -124,20 +144,24 @@ var page = {
     });
   },
 
-  updateMessage: function (editedMessage, MessageId) {
 
-  $.ajax({
-    url: page.url + '/' + messageId,
-    method: 'PUT',
-    data: editedMessage,
-    success: function (data) {
-      $('.message').html('');
-      page.loadMessages();
+  addMessage: function(event) {
+    event.preventDefault();
 
-    },
-    error: function (err) {}
-  });
-},
+    var $attachUsername = $username;
+    if ($('#messageInput').val().trim().length > 0) {
+      var newMessage = {
+        content: $('#messageInput').val(),
+        timestamp: page.getCurrentTime(),
+        author: $attachUsername,
+        userIcon: $userImage
+      }
+      page.createMessage(newMessage);
+    } else {
+      $('#messageInput').val("");
+
+    }
+  },
 
 
   deleteMessage: function(deleteId) {
@@ -152,33 +176,86 @@ var page = {
 },
 
 
-
-  addMessage: function(event) {
+////////////Trying to create Login here//////////////
+  addLogin: function(event) {
     event.preventDefault();
-
-    var $attachUsername = $username;
-    if ($('#messageInput').val().trim().length > 0) {
-      var newMessage = {
-        content: $('#messageInput').val(),
-        timestamp: page.getCurrentTime(),
-        author: $attachUsername,
-        userIcon: $userImage
-      }
-      console.log(newMessage);
-      page.createMessage(newMessage);
-    } else {
-      $('#messageInput').val("");
-
+    var newLogin = {
+      login: $('#landingFormUsername').val(),
+      password: $('#landingFormPassword').val(),
     }
+    page.createLogin(newLogin);
   },
 
-  navPages: function (event) {
-  event.preventDefault();
+  createLogin: function(login) {
+    $.ajax({
 
-  var clickedPage = $(this).attr('rel');
-  $(clickedPage).siblings().removeClass('active');
-  $(clickedPage).addClass('active');
+      url: page.urllogin,
+      method: 'POST',
+      data: login,
+      success: function(data) {
+        page.addOneLoginToDOM(data);
+      },
+      error: function(err) {
+      console.log("error", err);
+    }
+    });
+  },
+
+  deleteLogin: function(deleteId) {
+  $.ajax({
+    url: page.urllogin + "/" + deleteId,
+    method: 'DELETE',
+    success: function (data) {
+      // $('.status').html('');
+      page.loadLogin();
+    }
+  });
 },
+
+
+  loadLogin: function () {
+    $.ajax({
+    url: page.urllogin,
+    method: 'GET',
+    success: function (data) {
+      console.log("Logins Loaded");
+    },
+
+
+    error: function (err) {
+
+    }
+  });
+  },
+
+  addAllLoginsToDOM: function(loginCollection) {
+    _.each(loginCollection, page.addOneLoginToDOM);
+  },
+
+  addOneLoginToDOM: function(login) {
+    page.loadTemplate("userStatus", login, $('#asideMain'));
+  },
+
+
+////////////////////////////////////////////////////
+
+
+//////////////This is David's way to not show delete circle currently has error//////
+  // getDelete: function(event){
+  //   var toDelete = _.reject($('.message')), function() {
+  //
+  //     return ('.message').find('.messageInfoName') = $username;
+  //
+  //   },
+  //
+  // hideDelete: function() {
+  //   page.getDelete.().find('.messageDelete').hide();
+  // },
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////This is Clayton's way to not show the delete circle/////////////
+
+///////////////////////////////////////////////////////////
 
   loadTemplate: function (tmplName, data, $target){
     var compiledTmpl = _.template(page.getTemplate(tmplName));
