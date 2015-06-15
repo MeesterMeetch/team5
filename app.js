@@ -1,5 +1,8 @@
 var $username;
 var $userImage;
+var $mostRecentMessageId;
+var $appendingRecentMessages;
+
 $(document).ready(function(){
   page.init();
 });
@@ -7,40 +10,144 @@ $(document).ready(function(){
 
 var page = {
 
-  url: "http://tiy-fee-rest.herokuapp.com/collections/blabber",
-  urllogin: "http://tiy-fee-rest.herokuapp.com/collections/blabberuserlogin",
+  url: "http://tiy-fee-rest.herokuapp.com/collections/blabberChat",
+  urllogin: "http://tiy-fee-rest.herokuapp.com/collections/blabberUsers",
 
   init: function () {
     page.initStyling();
     page.initEvents();
-    page.loadNewMessages();
-
   },
 
   initStyling: function () {
     page.loadMessages();
-
   },
 
 
 
 
   initEvents: function (event) {
-    /////////Added this for login///////////////////
-    $('#landingPageForm').on('submit', page.addLogin);
-    ////////////////////////////////////////////////
+
     $('#messageForm').on('submit', page.addMessage);
 
+    $('#loggedInLeft').on('click', '#loggedInLeftEdit', function() {
+      console.log('Clicked!');
+      $(this).hide();
+      $('#loggedInLeftName').css('width', '90%');
+      $('#loggedInLeftName').css('color', 'black');
+      $('#loggedInLeftName').html("<form id='loggedInLeftInput'><input type='text' value='" + $username + "'></form>");
+    });
+
+    $('#loggedInLeft').on('submit', '#loggedInLeftInput', function(e) {
+      e.preventDefault();
+      $.ajax({
+        url: page.urllogin,
+        method: 'GET',
+        success: function (data) {
+          console.log('Got!');
+          _.each(data, function(el, idx, arr){
+            console.log($username);
+            console.log(el.username);
+            if ($username === el.username) {
+              $.ajax({
+                url: page.urllogin + "/" + el._id,
+                method: 'DELETE',
+                success: function (data) {
+                  console.log('User deleted.');
+                  $username = $('#loggedInLeftInput').children().val();
+                  $(this).hide();
+                  $('#loggedInLeftEdit').show();
+                  $('#loggedInLeftName').html($username);
+                  $('#loggedInLeftName').css('width', '50%');
+                  $('#loggedInLeftName').css('color', 'white');
+                  var newUser = {
+                    username: $username,
+                    userIcon: $userImage,
+                    available: true
+                  }
+                  page.createUser(newUser);
+                }
+              });
+            }
+          });
+        },
+        error: function (err) {
+
+        }
+      });
+    })
+
     $('#logOutButton').on('click', function(){
-      location.reload();
+      $.ajax({
+        url: page.urllogin,
+        method: 'GET',
+        success: function (data) {
+          console.log('DATA: ', data);
+          var users = data;
+          _.each(users, function(idx, el, arr){
+            if (users[el].username === $username) {
+              page.deleteUser(users[el]._id);
+            }
+          });
+          $username = undefined;
+          $userImage = undefined;
+          $('#landingFormUsername').val("");
+          $('.landingPageImage').removeClass('selectedUserImage');
+          $('#landingPage').fadeIn();
+          $('#asideMain').html("");
+          $('#sectionMain').html("");
+          $('#loggedInLeft').html("");
+        },
+        error: function (err) {
+
+        }
+      });
+    });
+
+    $('#asideMain').on('click', '.statusOnCircle', function() {
+      if ($(this).closest('.status').find('.statusName').text() === $username) {
+        if ($(this).hasClass('availableFalse') === true) {
+          $(this).removeClass('availableFalse');
+        } else {
+          $(this).addClass('availableFalse');
+        }
+      }
+      if ($(this).closest('.status').find('.statusName').text() === $username) {
+        $.ajax({
+          url: page.urllogin,
+          method: 'GET',
+          success: function (data) {
+            _.each(data, function(el, idx, arr) {
+              if (el.username === $username) {
+                if (el.available === "true") {
+                  console.log('Available is true.');
+                    var updatedStatus = {
+                      userIcon: el.userIcon,
+                      username: el.username,
+                      available: false
+                    };
+                    page.updateUserStatuses(updatedStatus, el._id);
+                } else if (el.available === "false") {
+                    var updatedStatus = {
+                      userIcon: el.userIcon,
+                      username: el.username,
+                      available: true
+                    };
+                    page.updateUserStatuses(updatedStatus, el._id);
+                }
+              }
+            });
+          },
+          error: function (err) {
+
+          }
+        });
+      }
     });
 
     $('#landingPageImagesBlock').on('click', '.landingPageImage', function(e){
       e.preventDefault();
-      console.log('hello');
       $(this).siblings().removeClass('selectedUserImage');
       $(this).addClass('selectedUserImage');
-      console.log($(this).html().trim());
       $userImage = $(this).html().trim();
     });
 
@@ -58,18 +165,45 @@ var page = {
     $('#landingPageForm').on('submit', function(e) {
       e.preventDefault();
       if ($userImage !== undefined && $('#landingFormUsername').val().trim().length > 0) {
-        $username = $('#landingFormUsername').val();
-        var userInfoArray = {
-          username: $username,
-          userIcon: $userImage
-        }
-        $('#landingPage').fadeOut();
-        $('#landingPageImageErrorBlock').removeClass('activeImageError');
-        $('#landingPageUsernameErrorBlock').removeClass('activeUsernameError');
-        page.loadTemplate("loggedInLeftBlock", userInfoArray, $('#loggedInLeft'));
-        /////////////Added this for status bar/////////////////
-        page.loadTemplate("userStatus", userInfoArray, $('#asideMain'))
-        ///////////////////////////////////////////////////////
+          $.ajax({
+          url: page.urllogin,
+          method: 'GET',
+          success: function (data) {
+            console.log('USERS: ', data);
+            var loginPass = true;
+            _.each(data, function(idx, el, arr) {
+              if ($('#landingFormUsername').val() === data[el].username) {
+                $('#landingPageUsernameErrorBlock').addClass('activeUsernameError');
+                $('#usernameErrorText').text('Username taken.');
+                loginPass = false;
+              }
+            })
+            if (loginPass) {
+              $username = $('#landingFormUsername').val();
+              var userInfoObject = {
+                username: $username,
+                userIcon: $userImage
+              }
+              page.addUser();
+              $('#landingPage').fadeOut();
+              $('#landingPageImageErrorBlock').removeClass('activeImageError');
+              $('#landingPageUsernameErrorBlock').removeClass('activeUsernameError');
+              page.loadTemplate("loggedInLeftBlock", userInfoObject, $('#loggedInLeft'));
+              $('#sectionMain').html("");
+              page.loadUserStatuses();
+              page.loadMessages();
+              setInterval(function() {
+                page.loadUserStatuses();
+                page.loadNewMessages();
+                page.disableDeleteCircles();
+              }, 2000);
+            }
+          },
+          error: function (err) {
+
+          }
+        });
+
 
       } else if ($userImage === undefined && $('#landingFormUsername').val().trim().length === 0) {
         $('#landingPageImageErrorBlock').addClass('activeImageError');
@@ -81,19 +215,11 @@ var page = {
         $('#landingPageUsernameErrorBlock').addClass('activeUsernameError');
         $('#landingPageImageErrorBlock').removeClass('activeImageError');
       }
-
-
     });
 
 
 
-    setInterval(function() {
-       page.loadNewMessages();
-
-    }, 2000);
-
   },
-
 
   addOneMessageToDOM: function(message) {
     page.loadTemplate("message", message, $('#sectionMain'));
@@ -102,27 +228,14 @@ var page = {
   addAllMessagesToDOM: function(messageCollection) {
     _.each(messageCollection, page.addOneMessageToDOM);
   },
-
-
-
-  loadMessages: function (data) {
+  loadMessages: function () {
     $.ajax({
     url: page.url,
     method: 'GET',
     success: function (data) {
-
       page.addAllMessagesToDOM(data.reverse());
-
-      $('.message').each(function(idx, el, arr){
-         if ($(el).find('.messageInfoName').text().trim() !== $username) {
-           $(el).find('.messageDelete').hide();
-         }
-        });
-
       $('#sectionMain').scrollTop($('#sectionMain')[0].scrollHeight);
     },
-
-
     error: function (err) {
 
     }
@@ -130,10 +243,10 @@ var page = {
 },
 
 addNewMessagesToDOM: function(newMessages) {
-    _.each(newMessages, page.addOneMessageToDOM);
-  },
+   _.each(newMessages, page.addOneMessageToDOM);
+ },
 
-  loadNewMessages: function(data){
+    loadNewMessages: function(data){
 
     $.ajax({
       url: page.url,
@@ -149,6 +262,31 @@ addNewMessagesToDOM: function(newMessages) {
           $('#sectionMain').scrollTop($('#sectionMain')[0].scrollHeight);
         }
       }
+    })
+    },
+
+  appendNewestMessages: function(messagesToAppend) {
+    console.log(messagesToAppend.reverse());
+
+    _.each(messagesToAppend.reverse(), function(el, idx, arr) {
+      var newMessage = {
+        content: el.content,
+        timestamp: el.timestamp,
+        author: el.author,
+        userIcon: el.userIcon
+      }
+      $.ajax({
+        url: page.url,
+        method: 'POST',
+        data: newMessage,
+        success: function (data) {
+          page.addOneMessageToDOM(data);
+        },
+        error: function (err) {
+          console.log("error ", err);
+        }
+
+      });
     })
   },
 
@@ -171,6 +309,18 @@ addNewMessagesToDOM: function(newMessages) {
   },
 
 
+
+  deleteMessage: function(deleteId) {
+  $.ajax({
+    url: page.url + "/" + deleteId,
+    method: 'DELETE',
+    success: function (data) {
+      $('#sectionMain').html('');
+      page.loadMessages();
+    }
+  });
+},
+
   addMessage: function(event) {
     event.preventDefault();
 
@@ -189,49 +339,22 @@ addNewMessagesToDOM: function(newMessages) {
     }
   },
 
-
-  deleteMessage: function(deleteId) {
-  $.ajax({
-    url: page.url + "/" + deleteId,
-    method: 'DELETE',
-    success: function (data) {
-      $('#sectionMain').html('');
-      page.loadMessages();
+  addUser: function() {
+    var newUser = {
+      username: $username,
+      userIcon: $userImage,
+      available: true
     }
-  });
-},
-
-  deleteAllMessages: function(messageCollection) {
-    $.ajax({
-      url: page.url,
-      method: 'DELETE',
-      success: function (data) {
-        $('#sectionMain').html('');
-        page.loadMessages();
-      }
-    });
-
+    page.createUser(newUser);
   },
 
-
-////////////Trying to create Login here//////////////
-  addLogin: function(event) {
-    event.preventDefault();
-    var newLogin = {
-      login: $('#landingFormUsername').val(),
-      password: $('#landingFormPassword').val(),
-    }
-    page.createLogin(newLogin);
-  },
-
-  createLogin: function(login) {
+  createUser: function(newUser) {
     $.ajax({
-
       url: page.urllogin,
       method: 'POST',
-      data: login,
+      data: newUser,
       success: function(data) {
-        page.addOneLoginToDOM(data);
+        console.log('New user created.');
       },
       error: function(err) {
       console.log("error", err);
@@ -239,55 +362,106 @@ addNewMessagesToDOM: function(newMessages) {
     });
   },
 
-  deleteLogin: function(deleteId) {
-  $.ajax({
-    url: page.urllogin + "/" + deleteId,
-    method: 'DELETE',
-    success: function (data) {
-      // $('.status').html('');
-      page.loadLogin();
-    }
-  });
-},
-
-  deleteAllLogins: function(messageCollection) {
-    $.ajax({
-      url: page.urllogin,
-      method: 'DELETE',
-      success: function (data) {
-        // $('.status').html('');
-        page.loadLogin();
-      }
-    });
-  },
-
-
-  loadLogin: function () {
+  loadUsers: function() {
     $.ajax({
     url: page.urllogin,
     method: 'GET',
     success: function (data) {
-      page.addAllLoginsToDOM();
-      console.log("Logins Loaded");
+      console.log('DATA: ', data);
+      return data;
     },
+    error: function (err) {
 
+    }
+  });
+},
 
+  deleteUser: function(deleteId) {
+    $.ajax({
+      url: page.urllogin + "/" + deleteId,
+      method: 'DELETE',
+      success: function (data) {
+        console.log('User deleted.');
+      }
+    });
+  },
 
+  createUserStatuses: function(data) {
+    _.each(data, function(idx, el, arr) {
+      page.loadTemplate2("userStatus", data[el], $('#asideMain'));
+    });
+  },
+
+  loadUserStatuses: function(data) {
+    $.ajax({
+    url: page.urllogin,
+    method: 'GET',
+    success: function (data) {
+      if (data.length === $("#asideMain").children().length) {
+        $('#asideMain').html("");
+        page.createUserStatuses(data);
+      } else {
+        $('#asideMain').html("");
+        page.createUserStatuses(data);
+      }
+    },
     error: function (err) {
 
     }
   });
   },
 
-  addAllLoginsToDOM: function(loginCollection) {
-    _.each(loginCollection, page.addOneLoginToDOM);
+  updateUserStatuses: function (editedStatus, statusId) {
+
+    $.ajax({
+      url: page.urllogin + '/' + statusId,
+      method: 'PUT',
+      data: editedStatus,
+      success: function (data) {
+        console.log('Status updated');
+        $('.content').html('');
+        page.loadUserStatuses();
+
+      },
+      error: function (err) {}
+    });
+
+
   },
 
-  addOneLoginToDOM: function(login) {
-    page.loadTemplate("userStatus", login, $('#asideMain'));
+  deleteAllUsers: function() {
+    $.ajax({
+      url: page.urllogin,
+      method: 'DELETE',
+      success: function (data) {
+        console.log('User deleted.');
+      }
+    });
   },
-  ////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+
+
+//////////////This is David's way to not show delete circle currently has error//////
+  // getDelete: function(event){
+  //   var toDelete = _.reject($('.message')), function() {
+  //
+  //     return ('.message').find('.messageInfoName') = $username;
+  //
+  //   },
+  //
+  // hideDelete: function() {
+  //   page.getDelete.().find('.messageDelete').hide();
+  // },
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////This is Clayton's way to not show the delete circle/////////////
+    // $('.message').each(function(idx, el, arr){
+    //   if ($(el).find('.messageInfoName').text().trim() !== $username) {
+    //     $(el).find('.messageDelete').hide();
+  //     }
+  //   });
+  // },
+///////////////////////////////////////////////////////////
 
   loadTemplate: function (tmplName, data, $target){
     var compiledTmpl = _.template(page.getTemplate(tmplName));
@@ -295,11 +469,17 @@ addNewMessagesToDOM: function(newMessages) {
     $target.append(compiledTmpl(data));
   },
 
+  loadTemplate2: function (tmplName, data, $target){
+    var compiledTmpl = _.template(page.getTemplate(tmplName));
+
+    $target.prepend(compiledTmpl(data));
+  },
+
   getTemplate: function(name) {
     return templates[name];
   },
   getCurrentTime: function() {
-    var time = moment().format('hh:mm:ss');
+    var time = moment().format();
     return time;
   },
   updateTime: function() {
@@ -307,6 +487,33 @@ addNewMessagesToDOM: function(newMessages) {
       console.log('One messageContentTimeBlock');
       var momentTime = moment($('.messageContentTimeBlock').text()).fromNow();
       $('.messageContentTimeBlock').text(momentTime);
+    });
+  },
+  disableDeleteCircles: function() {
+    $.ajax({
+      url: page.url,
+      method: 'GET',
+      success: function (data) {
+        var authorsNotEqual = _.reject(data, {author: $username});
+        authorsNotEqual = $.unique(authorsNotEqual);
+        console.log(authorsNotEqual);
+        for (var i = 0; i < authorsNotEqual.length; i++) {
+          console.log('Authors not equal to $username: ', authorsNotEqual[i].author);
+          $('.message').each(function(idx, el, arr){
+            console.log('Author of each message: ', $(el).find('.messageInfoName').text().trim());
+            console.log(authorsNotEqual[i].author === $(el).find('.messageInfoName').text().trim());
+             if (authorsNotEqual[i].author === $(el).find('.messageInfoName').text().trim()) {
+               $(el).find('.messageDeleteCircle').hide();
+               console.log($(el).find('.messageDeleteCircle'));
+             } else {
+               $(el).find('.messageDeleteCircle').show();
+             }
+          });
+        };
+      },
+      error: function (err) {
+
+      }
     });
   }
 };
