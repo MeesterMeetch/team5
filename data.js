@@ -37,14 +37,17 @@ templates.message = [
 templates.userStatus = [
   "<div class='status'>",
    "<div class='statusImage'>",
-      "<%=userIcon%>",
+      "<%= userIcon %>",
    "</div>",
    "<div class='statusName'>",
-     "<%=$username%>",
+     "<%= username%>",
    "</div>",
    "<div class='statusOn'>",
-     "<div class='statusOnCircle'>",
-     "</div>",
+   "<% if (available === 'true') { %>",
+     "<div class='statusOnCircle'></div>",
+   "<% } else if (available === 'false') { %>",
+     "<div class='statusOnCircle availableFalse'></div>",
+   "<% } %>",
    "</div>",
   "</div>"
 ].join("");
@@ -56,5 +59,9 @@ templates.loggedInLeftBlock = [
   "</div>",
   "<div id='loggedInLeftName'>",
   "<%= username %>",
-  "</div></div>"
+  "</div>",
+  "<div id='loggedInLeftEdit'>",
+  "Edit",
+  "</div>",
+  "</div>"
 ].join("");

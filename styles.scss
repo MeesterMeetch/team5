@@ -1,127 +1,84 @@
 /*********************
 VARIABLES
 *********************/
-$headerColor: #424242;
-$roboto: 'Roboto', sans, lightcyan;
-$bgColor: #060606;
-$defaultButtonBG: rgb(66,66,66);
-$primaryButtonBG: rgb(42, 159, 214);
-$successColor: rgb(119, 179, 0);
-$successButtonBG: rgb(119, 179, 0);
-$infoButtonBG: rgb(153, 51, 204);
-$warningButtonBG: rgb(255, 136, 0);
-$dangerButtonBG: rgb(204, 0, 0);
-$pageBG: rgb(6, 6, 6);
-$textColorWhite: rgb(255, 255, 255);
-$panelContentColor: #8888A0;
-$namesColor: #888888;
-$aLinkColorBlue: #2a9fd6;
-$inputFont: #888888;
-$bordersGray: 1px solid #282828;
-
 /*********************
 SETUP
 *********************/
-
 html, body {
   height: 100%;
-  width: 100%;
-}
+  width: 100%; }
 
 html {
-  font-size: 24px;
-}
+  font-size: 24px; }
 
 body {
-  background-color: $bgColor;
-  color: $textColorWhite;
-  font-family: $roboto;
-}
+  background-color: #060606;
+  color: white;
+  font-family: "Roboto", sans, lightcyan; }
 
 #credit {
-  display: none;
-}
+  display: none; }
 
 *, *:before, *:after {
   box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
+  -webkit-box-sizing: border-box; }
 
-h1,h2,h3,h4,h5,h6,ul,li,p {
+h1, h2, h3, h4, h5, h6, ul, li, p {
   margin: 0;
-  padding: 0;
-}
+  padding: 0; }
 
 img {
-  max-width: 100%;
-}
+  max-width: 100%; }
 
 a {
-  color: $aLinkColorBlue;
-  text-decoration: none;
-}
+  color: #2a9fd6;
+  text-decoration: none; }
 
 /*********************
 GENERAL
 *********************/
-
 #pageWrapper {
   max-width: 80%;
-  margin: 0 auto;
-}
+  margin: 0 auto; }
 
 #siteTitleBlock {
   display: flex;
   justify-content: center;
-  padding: 20px 0;
-
-  #siteTitle {
+  padding: 20px 0; }
+  #siteTitleBlock #siteTitle {
     position: relative;
-    left: 29px;
-
-    img {
+    left: 29px; }
+    #siteTitleBlock #siteTitle img {
       position: absolute;
       left: -58px;
       height: 69px;
       top: 20px;
       border-top-left-radius: 5px;
-      border-bottom-left-radius: 5px;
-    }
-
-    h1 {
+      border-bottom-left-radius: 5px; }
+    #siteTitleBlock #siteTitle h1 {
       font-size: 4rem;
       font-weight: lighter;
-      color: white;
-    }
-  }
-}
+      color: white; }
 
 #chat {
   width: 100%;
   height: 700px;
   border-radius: 5px;
-  border: 5px solid $defaultButtonBG;
-}
+  border: 5px solid #424242; }
 
 /*********************
 LANDING PAGE
 *********************/
-
 header {
   height: 10%;
-  border-bottom: $bordersGray;
-  background-color: $defaultButtonBG;
-
-  > div {
+  border-bottom: 1px solid #282828;
+  background-color: #424242; }
+  header > div {
     height: 100%;
     width: 100%;
-    display: none;
-  }
-
-  > div.active {
-    display: flex;
-  }
-}
+    display: none; }
+  header > div.active {
+    display: flex; }
 
 #landingPage {
   width: 100%;
@@ -131,149 +88,90 @@ header {
   z-index: 100;
   display: inline-flex;
   justify-content: center;
-  align-items: center;
-
-  #landingPageBlock {
+  align-items: center; }
+  #landingPage #landingPageBlock {
     width: 50%;
     height: 100%;
-    overflow: visible;
-  }
-  #landingPageTitleBlock {
+    overflow: visible; }
+  #landingPage #landingPageTitleBlock {
     height: auto;
     padding: 10px 0;
-    text-align: center;
-    h1 {
+    text-align: center; }
+    #landingPage #landingPageTitleBlock h1 {
       font-size: 10vmax;
-      font-weight: lighter;
-    }
-  }
-}
+      font-weight: lighter; }
 
 #landingPageForm {
   display: inline-flex;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content: center;
-  > label {
+  justify-content: center; }
+  #landingPageForm > label {
     padding: 15px 0;
     font-weight: bolder;
-    letter-spacing: 0.08rem;
-  }
-
-  > input {
+    letter-spacing: 0.08rem; }
+  #landingPageForm > input {
     background-color: black;
     padding: 10px;
     width: 100%;
-    border: 1px solid white;
-
-    &:focus {
-      outline: 0;
-    }
-  }
-}
+    border: 1px solid white; }
+    #landingPageForm > input:focus {
+      outline: 0; }
 
 #landingPageFormBlock {
   height: 70%;
-  width: 100%;
-
-
-  #landingPageForm {
+  width: 100%; }
+  #landingPageFormBlock #landingPageForm {
     height: 100%;
     display: inline-flex;
     flex-wrap: wrap;
-    justify-content: center;
-
-    #landingPageInputWrapper{
+    justify-content: center; }
+    #landingPageFormBlock #landingPageForm #landingPageUsernameBlock {
+      position: relative;
       width: 80%;
-      height: auto;
-      font-size: 2.5vmax;
-      display: inline-flex;
+      display: flex;
+      flex-direction: column;
       justify-content: center;
-      margin-bottom: 2%;
-
-      #landingPageUsernameBlock{
-          height: 100%;
-          width: 49%;
-          display: inline-flex;
-          justify-content: center;
-          flex-wrap: wrap;
-          margin-right: 1%;
-        > label {
-          padding: 1% 0;
-          font-weight: bolder;
-          letter-spacing: 0.08rem;
-        }
-
-        > input {
-          background-color: black;
-          padding: 1%;
-          width: 100%;
-          border: 1px solid white;
-
-          &:focus {
-            outline: 0;
-          }
-        }
-      }
-      #landingPagePasswordBlock {
-        height: 100%;
-        width: 49%;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        > label {
-          padding: 1% 0;
-          font-weight: bolder;
-          letter-spacing: 0.08rem;
-        }
-
-        > input {
-          background-color: black;
-          padding: 1%;
-          width: 100%;
-          border: 1px solid white;
-
-          &:focus {
-            outline: 0;
-          }
-        }
-      }
-    }
-    #landingPageSubmitBlock {
-      width: 80%;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 5%;
-    }
-
-  }
-}
+      flex-wrap: wrap;
+      text-align: center; }
+      #landingPageFormBlock #landingPageForm #landingPageUsernameBlock > label {
+        padding: 1% 0;
+        font-weight: bolder;
+        letter-spacing: 0.08rem; }
+      #landingPageFormBlock #landingPageForm #landingPageUsernameBlock > input {
+        background-color: black;
+        padding: 1%;
+        width: 100%;
+        border: 1px solid white; }
+        #landingPageFormBlock #landingPageForm #landingPageUsernameBlock > input:focus {
+          outline: 0; }
+  #landingPageFormBlock #landingPageSubmitBlock {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5%; }
 
 #landingPageUsernameErrorBlock {
   display: none;
   position: absolute;
-  left: 50%;
+  left: 105%;
   top: 0;
-  height: 100%;
+  height: 100px;
   width: 125px;
-  border: 1px solid $dangerButtonBG;
-  #landingPageUsernameError {
+  border: 1px solid #cc0000; }
+  #landingPageUsernameErrorBlock #landingPageUsernameError {
     height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-
-    #usernameErrorIcon {
+    align-items: center; }
+    #landingPageUsernameErrorBlock #landingPageUsernameError #usernameErrorIcon {
       height: 35%;
       width: 100%;
-      background-color: $dangerButtonBG;
+      background-color: #cc0000;
       display: flex;
       align-items: center;
-      justify-content: center;
-    }
-
-    #usernameErrorText {
+      justify-content: center; }
+    #landingPageUsernameErrorBlock #landingPageUsernameError #usernameErrorText {
       height: 65%;
       font-size: .75rem;
       padding: 2.5px;
@@ -282,371 +180,262 @@ header {
       font-size: .7rem;
       display: flex;
       justify-content: center;
-      align-items: center;
-    }
-  }
-}
-
-
+      align-items: center; }
 
 #landingPageImagesBlock {
   display: inline-flex;
   flex-wrap: wrap;
+  padding: 10px;
   border: 1px solid white;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 80%;
   height: auto;
-  overflow: visible;
-  .landingPageImage {
-    width: 100px;
-    height: 100px;
+  overflow: visible; }
+  #landingPageImagesBlock .landingPageImage {
+    width: 22.5%;
     cursor: pointer;
     padding: 8px;
-    margin: 8px 0;
     border: 1px solid black;
     transition: all .25s ease;
     -webkit-transition: all .25s ease;
-    display:inline-flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    img {
+    justify-content: center; }
+    #landingPageImagesBlock .landingPageImage img {
       height: 70px;
-      width: 70px;
-    }
+      width: 70px; }
+    #landingPageImagesBlock .landingPageImage:hover {
+      border-color: #424242; }
 
-      &:hover {
-        border-color: $defaultButtonBG;
-      }
-    }
-  }
+#landingPageImagesBlock .selectedUserImage {
+  border-color: #77b300; }
+  #landingPageImagesBlock .selectedUserImage:hover {
+    border-color: #77b300; }
 
-  .selectedUserImage {
-    border-color: $successButtonBG;
-
-    &:hover {
-      border-color: $successButtonBG;
-    }
-  }
-
-
-  #landingPageImageErrorBlock {
-    display: none;
-    position: absolute;
-    left: 105%;
-    top: 0;
+#landingPageImageErrorBlock {
+  display: none;
+  position: absolute;
+  left: 105%;
+  top: 0;
+  height: 100%;
+  width: 125px;
+  border: 1px solid #cc0000;
+  text-align: center;
+  align-items: center; }
+  #landingPageImageErrorBlock #landingPageImageError {
     height: 100%;
-    width: 125px;
-    border: 1px solid $dangerButtonBG;
-    text-align: center;
-    align-items: center;
-
-    #landingPageImageError {
-      height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center; }
+    #landingPageImageErrorBlock #landingPageImageError > div {
       display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-
-      > div {
-        display: flex;
-        align-items: center;
-      }
-
-      #imageErrorIcon {
-        height: 25%;
-        width: 100%;
-        background-color: $dangerButtonBG;
-        display: flex;
-        justify-content: center;
-
-        span {
-          font-size: 1.75rem;
-
-          &:before {
-            color: white;
-          }
-        }
-      }
-
-      #imageErrorText {
-        height: 75%;
-        font-weight: lighter;
-        color: $dangerButtonBG;
-      }
-    }
-  }
+      align-items: center; }
+    #landingPageImageErrorBlock #landingPageImageError #imageErrorIcon {
+      height: 25%;
+      width: 100%;
+      background-color: #cc0000;
+      display: flex;
+      justify-content: center; }
+      #landingPageImageErrorBlock #landingPageImageError #imageErrorIcon span {
+        font-size: 1.75rem; }
+        #landingPageImageErrorBlock #landingPageImageError #imageErrorIcon span:before {
+          color: white; }
+    #landingPageImageErrorBlock #landingPageImageError #imageErrorText {
+      height: 75%;
+      font-weight: lighter;
+      color: #cc0000; }
 
 #landingPageImageErrorBlock.activeImageError {
-    display: flex;
-  }
+  display: flex; }
 
 #landingPageSubmitBlock {
-  padding: 15px 0;
-
-  > input {
+  padding: 15px 0; }
+  #landingPageSubmitBlock > input {
     width: 100%;
     background-color: black;
-    border: 1px solid $successColor;
+    border: 1px solid #77b300;
     font-weight: lighter;
-    color: $successColor;
+    color: #77b300;
     transition: all .25s ease;
-    -webkit-transition: all .25s ease;
-
-    &:hover {
+    -webkit-transition: all .25s ease; }
+    #landingPageSubmitBlock > input:hover {
       color: white;
-      background-color: $successColor;
-    }
-
-    &:focus {
-      outline: 0;
-    }
-  }
-}
-
+      background-color: #77b300; }
+    #landingPageSubmitBlock > input:focus {
+      outline: 0; }
 
 #landingPageUsernameErrorBlock.activeUsernameError {
-display: block;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  display: block; }
 
 /*********************
 HEADER
 *********************/
-
 header {
   height: 10%;
-  border-bottom: $bordersGray;
-  background-color: $defaultButtonBG;
-
-  > div {
+  border-bottom: 1px solid #282828;
+  background-color: #424242; }
+  header > div {
     height: 100%;
     width: 100%;
-    display: none;
-  }
+    display: none; }
+  header > div.active {
+    display: flex; }
 
-  > div.active {
-    display: flex;
-  }
-}
-
-#headerLoggedInBlock {
-
-  #loggedInLeft {
-    width: 85%;
+#headerLoggedInBlock #loggedInLeft {
+  width: 85%;
+  height: 100%; }
+  #headerLoggedInBlock #loggedInLeft #loggedInLeftBlock {
     height: 100%;
-
-    #loggedInLeftBlock {
-      height: 100%;
-      width: 30%;
+    width: 30%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center; }
+    #headerLoggedInBlock #loggedInLeft #loggedInLeftBlock #loggedInLeftImage {
+      width: 28%;
       display: flex;
-      justify-content: flex-start;
-      align-items: center;
-
-      #loggedInLeftImage {
-        width: 28%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        img {
-          height: 50px;
-          width: 50px;
-          border-radius: 50%;
-        }
-      }
-
-      #loggedInLeftName {
-        width: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    }
-  }
-
-  #loggedInRight {
-    height: 100%;
-    width: 14.5%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    button {
-      width: 95%;
-      height: 50%;
-      font-size: .6rem;
-      background-color: $defaultButtonBG;
-      color: red;
-      border: 1px solid red;
-      transition: all .25s ease;
-      -webkit-transition: all .25s ease;
-
-      &:hover {
-        background-color: $dangerButtonBG;
-        color: white;
-      }
-    }
-  }
-}
+      justify-content: center;
+      align-items: center; }
+      #headerLoggedInBlock #loggedInLeft #loggedInLeftBlock #loggedInLeftImage img {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%; }
+    #headerLoggedInBlock #loggedInLeft #loggedInLeftBlock #loggedInLeftName {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+    #headerLoggedInBlock #loggedInLeft #loggedInLeftBlock #loggedInLeftEdit {
+      cursor: pointer;
+      color: #2a9fd6;
+      font-size: .75rem; }
+#headerLoggedInBlock #loggedInRight {
+  height: 100%;
+  width: 14.5%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  #headerLoggedInBlock #loggedInRight button {
+    width: 95%;
+    height: 50%;
+    font-size: .6rem;
+    background-color: #424242;
+    color: red;
+    border: 1px solid red;
+    transition: all .25s ease;
+    -webkit-transition: all .25s ease; }
+    #headerLoggedInBlock #loggedInRight button:hover {
+      background-color: #cc0000;
+      color: white; }
 
 /*********************
 MAIN
 *********************/
-
 main {
   display: flex;
-  height: 78%;
-}
+  height: 78%; }
 
 /*********************
 ASIDE
 *********************/
-
 aside {
   width: 25%;
   height: 100%;
-  border-right: $primaryButtonBG;
-}
+  border-right: #2a9fd6; }
 
 #asideHeader {
   height: 10%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: $bordersGray;
-  background-color: $primaryButtonBG;
-}
+  border-bottom: 1px solid #282828;
+  background-color: #2a9fd6; }
 
 #asideMain {
   height: 90%;
-}
+  overflow: scroll; }
 
 .status {
   display: flex;
   align-items: center;
   height: 60px;
-  background-color: $defaultButtonBG;
-  border-bottom: $bordersGray;
-
-  > div {
+  background-color: #222;
+  border-bottom: 1px solid #282828; }
+  .status > div {
     display: flex;
     justify-content: center;
-    align-items: center;
-  }
-}
+    align-items: center; }
 
 .statusImage {
-  width: 25%;
-
-  img {
+  width: 25%; }
+  .statusImage img {
     height: 40px;
     width: 40px;
-    border-radius: 50%;
-  }
-}
+    border-radius: 50%; }
 
 .statusName {
   width: 50%;
   font-size: .8rem;
-  color: $namesColor;
-}
+  color: #888888; }
 
 .statusOn {
-  width: 25%;
-
-  .statusOnCircle {
+  width: 25%; }
+  .statusOn .statusOnCircle {
     height: 20px;
     width: 20px;
-    background-color: $successColor;
-    border-radius: 50%;
-  }
-}
+    background-color: #77b300;
+    border-radius: 50%; }
+  .statusOn .statusOnCircle.availableFalse {
+    background-color: #cc0000 !important; }
 
 /*********************
 SECTION
 *********************/
-
 section {
   width: 75%;
-  height: 100%;
-}
+  height: 100%; }
 
 #sectionHeader {
   height: 10%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: $bordersGray;
-  background-color: $primaryButtonBG;
-}
-
-#sectionHeaderTitle {
-
-}
+  border-bottom: 1px solid #282828;
+  background-color: #2a9fd6; }
 
 #sectionMain {
   height: 90%;
   overflow: scroll;
   padding-bottom: 12.5px;
-  background-color: #888888;
-}
+  background-color: #888888; }
 
 /*********************
 MESSAGE
 *********************/
-
 .message {
   display: flex;
   flex-wrap: wrap;
   padding: 12.5px 0 0 0;
-  background-color: #888888;
-
-  &:last-child {
-    .messageBorderBlock {
-      display: none;
-    }
-  }
-}
+  background-color: #888888; }
+  .message:last-child .messageBorderBlock {
+    display: none; }
 
 .messageInfo {
   width: 20%;
   display: flex;
   flex-direction: column;
-  height: 125px;
-}
+  height: 125px; }
 
 .messageInfoImage {
   height: 60%;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-
-  img {
+  align-items: flex-end; }
+  .messageInfoImage img {
     height: 60px;
     width: 60px;
-    border-radius: 50%;
-  }
-}
+    border-radius: 50%; }
 
 .messageInfoName {
   height: 40%;
@@ -655,61 +444,51 @@ MESSAGE
   justify-content: center;
   align-items: flex-start;
   font-size: 18px;
-  text-overflow:clip;
-}
+  text-overflow: clip; }
 
 .messageContent {
   width: 72.5%;
   height: auto;
   background-color: #CCCCCC;
-  border-radius: 14px;
-  box-shadow: 3px 3px 0px 0px black;
-
-}
+  border-radius: 4px;
+  box-shadow: 3px 3px 0px 0px black; }
 
 .messageContentTime {
-  color: $successColor;
+  color: #77b300;
   font-weight: lighter;
   font-size: 0.5rem;
   margin-bottom: 5px;
   margin-left: 2%;
-  margin-top: 1%;
-}
+  margin-top: 1%; }
 
 .messageContentTimeBlock {
-  font-size: .5rem;
-}
+  font-size: .5rem; }
 
 .messageContentText {
   margin-left: 2%;
-  margin-right: 3%;
-}
+  margin-right: 3%; }
 
 .messageDelete {
   width: 7.5%;
   text-align: center;
   display: flex;
-  justify-content: center;
-}
+  justify-content: center; }
 
 .messageDeleteCircle {
   position: relative;
   cursor: pointer;
   width: 25px;
   height: 25px;
-  border: 1px solid $dangerButtonBG;
+  border: 1px solid #cc0000;
   border-radius: 50%;
   font-weight: lighter;
   font-size: .75rem;
-  color: $dangerButtonBG;
+  color: #cc0000;
   -webkit-transition: all .25s ease;
-  transition: all .25s ease;
-
-  &:hover {
-    background-color: $dangerButtonBG;
-    color: $textColorWhite;
-  }
-}
+  transition: all .25s ease; }
+  .messageDeleteCircle:hover {
+    background-color: #cc0000;
+    color: white; }
 
 .messageDeleteX {
   position: absolute;
@@ -717,81 +496,62 @@ MESSAGE
   right: 0;
   bottom: 0;
   left: 0;
-  margin: auto;
-}
+  margin: auto; }
 
 .messageBorderBlock {
   width: 85%;
   height: 12.5px;
   margin: 0 auto;
-  -webkit-box-shadow: 0px 14px 5px -5px rgba(136,136,136,0.25);
-  -moz-box-shadow: 0px 14px 5px -5px rgba(136,136,136,0.25);
-  box-shadow: 0px 14px 5px -5px rgba(136,136,136,0.25);
-}
+  -webkit-box-shadow: 0px 14px 5px -5px rgba(136, 136, 136, 0.25);
+  -moz-box-shadow: 0px 14px 5px -5px rgba(136, 136, 136, 0.25);
+  box-shadow: 0px 14px 5px -5px rgba(136, 136, 136, 0.25); }
 
 /*********************
 FOOTER
 *********************/
-
 footer {
   height: 12%;
-  background-color: $defaultButtonBG;
-  color: black;
-}
+  background-color: #424242;
+  color: black; }
 
 #footerBlock {
   width: 80%;
   height: 100%;
-  margin: 0 auto;
-
-}
+  margin: 0 auto; }
 
 #messageForm {
   height: 100%;
   display: flex;
-  align-items: center;
-
-  input {
-    height: 70%;
-  }
-
-  #messageInput {
+  align-items: center; }
+  #messageForm input {
+    height: 70%; }
+  #messageForm #messageInput {
     width: 90%;
-    padding-left: 2.5%;
-
-    &:focus {
-      outline: 0;
-    }
-  }
-
-  #messageSubmit {
+    padding-left: 2.5%; }
+    #messageForm #messageInput:focus {
+      outline: 0; }
+  #messageForm #messageSubmit {
     width: 10%;
     font-weight: lighter;
-    border: 1px solid $successButtonBG;
-    background-color: $defaultButtonBG;
-    color: $successButtonBG;
+    border: 1px solid #77b300;
+    background-color: #424242;
+    color: #77b300;
     -webkit-transition: all .25s ease;
-    transition: all .25s ease;
-
-    &:hover {
-      background-color: $successButtonBG;
-      color: $textColorWhite;
-    }
-  }
-}
+    transition: all .25s ease; }
+    #messageForm #messageSubmit:hover {
+      background-color: #77b300;
+      color: white; }
 
 /*********************
 CREDITS
 *********************/
-
 #credits {
   font-size: .5rem;
   color: gray;
   padding: 25px 0;
-  text-align: center;
-
-  > a {
+  text-align: center; }
+  #credits > a {
     color: gray;
-    text-decoration: underline;
-  }
-}
+    text-decoration: underline; }
+
+/*# sourceMappingURL=styles.css.map */
